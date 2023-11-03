@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!--  Toolbar  -->
+        <!--#region  Toolbar-->
         <CommandBar
             HorizontalAlignment="Left"
             Background="Transparent"
@@ -39,8 +39,9 @@
                 Icon="Delete"
                 Label="Delete" />
         </CommandBar>
+        <!--#endregion-->
 
-        <!--  Container for DataGrid with Torrents data  -->
+        <!--#region Torrents Grid-->
         <Border
             Grid.Row="1"
             Height="Auto"
@@ -50,13 +51,16 @@
             Background="{ThemeResource LayerFillColorDefaultBrush}"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
-            CornerRadius="8">
+            CornerRadius="8"
+            PointerPressed="Grid_PointerPressed">
             <Grid Padding="16">
                 <controls:DataGrid
+                    x:Name="TorrentGrid"
                     AutoGenerateColumns="False"
                     GridLinesVisibility="None"
                     IsReadOnly="True"
-                    ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}">
+                    ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
+                    LoadingRow="TorrentGrid_LoadingRow">
 
                     <controls:DataGrid.Resources>
                         <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundColor" Color="Transparent" />
@@ -88,19 +92,44 @@
                 </controls:DataGrid>
             </Grid>
         </Border>
+        <!--#endregion-->
 
-        <!--  Container for Details Panel  -->
+        <!--#region Details Panel-->
         <Border
             Grid.Row="2"
             Height="250"
             Margin="0,8,0,8"
+            Padding="8,0,8,0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
             Background="{ThemeResource LayerFillColorDefaultBrush}"
             BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
             BorderThickness="1"
             CornerRadius="8">
-            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Content here!</TextBlock>
+
+            <Pivot>
+                <Pivot.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock FontSize="14" Text="{Binding}" />
+                    </DataTemplate>
+                </Pivot.HeaderTemplate>
+                <PivotItem Header="Files">
+                    <TextBlock Text="all emails go here." />
+                </PivotItem>
+                <PivotItem Header="Info">
+                    <TextBlock Text="unread emails go here." />
+                </PivotItem>
+                <PivotItem Header="Speed">
+                    <TextBlock Text="flagged emails go here." />
+                </PivotItem>
+                <PivotItem Header="Peers">
+                    <TextBlock Text="urgent emails go here." />
+                </PivotItem>
+                <PivotItem Header="Trackers">
+                    <TextBlock Text="urgent emails go here." />
+                </PivotItem>
+            </Pivot>
         </Border>
+        <!--#endregion-->
     </Grid>
 </Page>

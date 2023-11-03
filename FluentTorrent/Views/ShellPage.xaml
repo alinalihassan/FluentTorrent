@@ -20,7 +20,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  App Title Bar  -->
+        <!--#region App Title Bar-->
         <Grid
             x:Name="AppTitleBar"
             Height="48"
@@ -40,8 +40,9 @@
                 Style="{StaticResource CaptionTextBlockStyle}"
                 TextWrapping="NoWrap" />
         </Grid>
+        <!--#endregion-->
 
-        <!--  Navigation Wrapper  -->
+        <!--#region Navigation-->
         <Grid Grid.Row="1">
             <NavigationView
                 x:Name="NavigationViewControl"
@@ -112,5 +113,6 @@
                 <Frame x:Name="NavigationFrame" Margin="0,-43,0,0" />
             </NavigationView>
         </Grid>
+        <!--#endregion-->
     </Grid>
 </Page>
