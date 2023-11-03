@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using FluentTorrent.Contracts.ViewModels;
 using FluentTorrent.Contracts.Services;
+using FluentTorrent.Contracts.ViewModels;
 using FluentTorrent.Models;
 
 namespace FluentTorrent.ViewModels;

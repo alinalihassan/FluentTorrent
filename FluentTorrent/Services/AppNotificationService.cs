@@ -2,7 +2,6 @@
 using System.Web;
 
 using FluentTorrent.Contracts.Services;
-using FluentTorrent.ViewModels;
 
 using Microsoft.Windows.AppNotifications;
 

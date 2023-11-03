@@ -13,5 +13,6 @@ public class Torrent
 
     public string Url
     {
-    get; set; }
+        get; set;
+    }
 }

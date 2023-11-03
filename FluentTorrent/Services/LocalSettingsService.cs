@@ -5,8 +5,6 @@ using FluentTorrent.Helpers;
 using FluentTorrent.Models;
 
 using Microsoft.Extensions.Options;
-
-using Windows.ApplicationModel;
 using Windows.Storage;
 
 namespace FluentTorrent.Services;

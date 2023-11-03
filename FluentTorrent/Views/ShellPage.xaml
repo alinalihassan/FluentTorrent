@@ -75,9 +75,18 @@
                     </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                 </behaviors:NavigationViewHeaderBehavior>
             </i:Interaction.Behaviors>
-            <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
-                <Frame x:Name="NavigationFrame" />
-            </Grid>
+            <StackPanel>
+                <CommandBar HorizontalAlignment="Left" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                    <AppBarButton Icon="Add" Label="Add Torrent"/>
+                    <AppBarButton Icon="Play" Label="Resume" IsEnabled="False"/>
+                    <AppBarButton Icon="Pause" Label="Pause"/>
+                    <AppBarSeparator/>
+                    <AppBarButton Icon="Delete" Label="Delete"/>
+                </CommandBar>
+                <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
+                    <Frame x:Name="NavigationFrame" />
+                </Grid>
+            </StackPanel>
         </NavigationView>
     </Grid>
 </Page>

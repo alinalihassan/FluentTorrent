@@ -1,6 +1,4 @@
-﻿using Microsoft.Windows.ApplicationModel.DynamicDependency;
-
-[assembly: WinUITestTarget(typeof(FluentTorrent.App))]
+﻿[assembly: WinUITestTarget(typeof(FluentTorrent.App))]
 
 namespace FluentTorrent.Tests.MSTest;
 
