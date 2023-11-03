@@ -2,7 +2,6 @@
     x:Class="FluentTorrent.Views.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:behaviors="using:FluentTorrent.Behaviors"
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,27 +16,29 @@
         </Grid.RowDefinitions>
 
         <!--  Toolbar  -->
-        <StackPanel Orientation="Horizontal">
-            <CommandBar
-                HorizontalAlignment="Left"
-                Background="Transparent"
-                DefaultLabelPosition="Right"
-                IsOpen="False"
-                OverflowButtonVisibility="Collapsed">
+        <CommandBar
+            HorizontalAlignment="Left"
+            Background="Transparent"
+            DefaultLabelPosition="Right"
+            IsOpen="False"
+            OverflowButtonVisibility="Collapsed">
 
-                <AppBarButton Icon="Add" Label="Add Torrent" />
-                <AppBarButton
-                    Icon="Play"
-                    IsEnabled="False"
-                    Label="Resume" />
-                <AppBarButton Icon="Pause" Label="Pause" />
-                <AppBarSeparator />
-                <AppBarButton
-                    Foreground="#E74856"
-                    Icon="Delete"
-                    Label="Delete" />
-            </CommandBar>
-        </StackPanel>
+            <AppBarButton
+                Click="AppBarButton_AddTorrent"
+                Icon="Add"
+                Label="Add Torrent" />
+            <AppBarButton
+                Icon="Play"
+                IsEnabled="False"
+                Label="Resume" />
+            <AppBarButton Icon="Pause" Label="Pause" />
+            <AppBarSeparator />
+            <AppBarButton
+                Click="AppBarButton_DeleteTorrent"
+                Foreground="#E74856"
+                Icon="Delete"
+                Label="Delete" />
+        </CommandBar>
 
         <!--  Container for DataGrid with Torrents data  -->
         <Border
