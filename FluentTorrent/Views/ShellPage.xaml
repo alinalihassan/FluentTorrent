@@ -7,11 +7,19 @@
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     Loaded="OnLoaded">
 
+    <Page.Resources>
+        <!--This top margin is the height of the custom TitleBar-->
+        <Thickness x:Key="NavigationViewContentMargin">0,0,0,0</Thickness>
+        <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
+        <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent"></SolidColorBrush>
+    </Page.Resources>
+
     <Grid>
         <Grid x:Name="AppTitleBar"
-              Canvas.ZIndex="1"
-              Height="{Binding ElementName=NavigationViewControl, Path=CompactPaneLength}"
               IsHitTestVisible="True"
+              Canvas.ZIndex="1"
+              Height="48"
+              Background="Transparent"
               VerticalAlignment="Top">
             <Image Source="/Assets/WindowIcon.ico"
                    HorizontalAlignment="Left"
@@ -27,6 +35,7 @@
             x:Name="NavigationViewControl"
             Canvas.ZIndex="0"
             IsBackButtonVisible="Collapsed"
+            IsTitleBarAutoPaddingEnabled="False"
             SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
             IsSettingsVisible="True"
             IsPaneToggleButtonVisible="False"
@@ -75,7 +84,8 @@
                     </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
                 </behaviors:NavigationViewHeaderBehavior>
             </i:Interaction.Behaviors>
-            <StackPanel>
+            
+            <!--<StackPanel>
                 <CommandBar HorizontalAlignment="Left" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
                     <AppBarButton Icon="Add" Label="Add Torrent"/>
                     <AppBarButton Icon="Play" Label="Resume" IsEnabled="False"/>
@@ -86,7 +96,49 @@
                 <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
                     <Frame x:Name="NavigationFrame" />
                 </Grid>
-            </StackPanel>
+            </StackPanel>-->
+
+            <Grid Margin="0,43,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel>
+                    <CommandBar HorizontalAlignment="Left" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
+                        <AppBarButton Icon="Add" Label="Add Torrent"/>
+                        <AppBarButton Icon="Play" Label="Resume" IsEnabled="False"/>
+                        <AppBarButton Icon="Pause" Label="Pause"/>
+                        <AppBarSeparator/>
+                        <AppBarButton Icon="Delete" Label="Delete"/>
+                    </CommandBar>
+                </StackPanel>
+
+                <Border Grid.Row="1" 
+                        Height="Auto" 
+                        Background="{ThemeResource LayerFillColorDefaultBrush}"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Margin="0"
+                        CornerRadius="8"
+                        BorderThickness="1"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+                    <!--<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Content here!</TextBlock>-->
+                    <Frame x:Name="NavigationFrame" />
+                </Border>
+                <Border Grid.Row="2" 
+                        Height="250"
+                        Background="{ThemeResource LayerFillColorDefaultBrush}"
+                        VerticalAlignment="Top" 
+                        HorizontalAlignment="Stretch"
+                        Margin="0" 
+                        CornerRadius="8"
+                        BorderThickness="1"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Content here!</TextBlock>
+                </Border>
+            </Grid>
         </NavigationView>
     </Grid>
 </Page>
