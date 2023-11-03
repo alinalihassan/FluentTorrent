@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "FluentTorrent (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "FluentTorrent (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}
