@@ -16,29 +16,35 @@
         </Grid.RowDefinitions>
 
         <!--#region  Toolbar-->
-        <CommandBar
-            HorizontalAlignment="Left"
-            Background="Transparent"
-            DefaultLabelPosition="Right"
-            IsOpen="False"
-            OverflowButtonVisibility="Collapsed">
+        <StackPanel Orientation="Horizontal">
+            <DropDownButton Content="Add Torrent">
+                <DropDownButton.Flyout>
+                    <MenuFlyout Placement="Bottom">
+                        <MenuFlyoutItem Click="AppBarButton_AddTorrentFile" Text="From File" />
+                        <MenuFlyoutItem Click="AppBarButton_AddTorrentMagnet" Text="From Magnet" />
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+            <CommandBar
+                HorizontalAlignment="Left"
+                Background="Transparent"
+                DefaultLabelPosition="Right"
+                IsOpen="False"
+                OverflowButtonVisibility="Collapsed">
 
-            <AppBarButton
-                Click="AppBarButton_AddTorrent"
-                Icon="Add"
-                Label="Add Torrent" />
-            <AppBarButton
-                Icon="Play"
-                IsEnabled="False"
-                Label="Resume" />
-            <AppBarButton Icon="Pause" Label="Pause" />
-            <AppBarSeparator />
-            <AppBarButton
-                Click="AppBarButton_DeleteTorrent"
-                Foreground="#E74856"
-                Icon="Delete"
-                Label="Delete" />
-        </CommandBar>
+                <AppBarButton
+                    Icon="Play"
+                    IsEnabled="False"
+                    Label="Resume" />
+                <AppBarButton Icon="Pause" Label="Pause" />
+                <AppBarSeparator />
+                <AppBarButton
+                    Click="AppBarButton_DeleteTorrent"
+                    Foreground="#E74856"
+                    Icon="Delete"
+                    Label="Delete" />
+            </CommandBar>
+        </StackPanel>
         <!--#endregion-->
 
         <!--#region Torrents Grid-->

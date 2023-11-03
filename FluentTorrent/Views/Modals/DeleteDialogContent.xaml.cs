@@ -7,4 +7,9 @@ public sealed partial class DeleteDialogContent : Page
     {
         this.InitializeComponent();
     }
+
+    public bool ShouldDeleteFiles()
+    {
+        return DialogDeleteFiles.IsChecked ?? false;
+    }
 }

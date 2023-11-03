@@ -37,10 +37,10 @@ public sealed partial class MainPage : Page
             MenuFlyout flyout = new MenuFlyout();
 
             // Make items
-            MenuFlyoutItem flyout_resume = new MenuFlyoutItem { Text = "Resume" };
-            MenuFlyoutItem flyout_pause = new MenuFlyoutItem { Text = "Pause" };
+            MenuFlyoutItem flyout_resume = new MenuFlyoutItem { Text = "Resume", Icon = new FontIcon { Glyph = "\uE768" } };
+            MenuFlyoutItem flyout_pause = new MenuFlyoutItem { Text = "Pause", Icon = new FontIcon { Glyph = "\uE769" } };
             MenuFlyoutSeparator flyout_sep1 = new MenuFlyoutSeparator();
-            MenuFlyoutItem flyout_delete = new MenuFlyoutItem { Text = "Delete" };
+            MenuFlyoutItem flyout_delete = new MenuFlyoutItem { Text = "Delete", Icon = new FontIcon { Glyph = "\uE74D" } };
 
             // Add items
             flyout.Items.Add(flyout_resume);
@@ -62,7 +62,7 @@ public sealed partial class MainPage : Page
     #endregion
 
     #region AppBar Buttons
-    private async void AppBarButton_AddTorrent(object sender, RoutedEventArgs e)
+    private async void AppBarButton_AddTorrentFile(object sender, RoutedEventArgs e)
     {
         var filePicker = new FileOpenPicker();
         filePicker.FileTypeFilter.Add(".torrent");
@@ -72,13 +72,35 @@ public sealed partial class MainPage : Page
 
         if (file != null)
         {
-            // Do something with the file.
+            // TODO: Add torrent
+        }
+    }
+
+    private async void AppBarButton_AddTorrentMagnet(object sender, RoutedEventArgs e)
+    {
+        var dialogContent = new AddMagnetDialogContent();
+        var dialog = new ContentDialog()
+        {
+            XamlRoot = XamlRoot,
+            Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
+            Title = "Add Torrent Links",
+            PrimaryButtonText = "Download",
+            CloseButtonText = "Cancel",
+            DefaultButton = ContentDialogButton.Primary,
+            Content = dialogContent
+        };
+
+        if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+        {
+            string[] magnetLinks = dialogContent.GetMagnetLinks();
+            // TODO: Do something with magnet links
         }
     }
 
     private async void AppBarButton_DeleteTorrent(object sender, RoutedEventArgs e)
     {
-        ContentDialog dialog = new ContentDialog()
+        var dialogContent = new DeleteDialogContent();
+        var dialog = new ContentDialog()
         {
             XamlRoot = XamlRoot,
             Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
@@ -86,10 +108,14 @@ public sealed partial class MainPage : Page
             PrimaryButtonText = "Delete",
             CloseButtonText = "Cancel",
             DefaultButton = ContentDialogButton.Primary,
-            Content = new DeleteDialogContent()
+            Content = dialogContent
         };
 
-        await dialog.ShowAsync();
+        if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+        {
+            bool deleteFiles = dialogContent.ShouldDeleteFiles();
+            // TODO: Delete torrent and file
+        }
     }
     #endregion
 }

@@ -5,7 +5,7 @@
 
     <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <TextBlock Text="Are you sure you want to remove the torrent?" TextWrapping="Wrap" />
-        <CheckBox Content="Delete the files." />
+        <CheckBox x:Name="DialogDeleteFiles" Content="Delete the files." />
     </StackPanel>
 
 </Page>
