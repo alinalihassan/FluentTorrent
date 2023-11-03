@@ -1,10 +1,36 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using FluentTorrent.Contracts.ViewModels;
+using FluentTorrent.Contracts.Services;
+using FluentTorrent.Models;
 
 namespace FluentTorrent.ViewModels;
 
-public partial class MainViewModel : ObservableRecipient
+public partial class MainViewModel : ObservableRecipient, INavigationAware
 {
-    public MainViewModel()
+
+    private readonly ITorrentDataService _torrentDataService;
+
+    public ObservableCollection<Torrent> Source { get; } = new ObservableCollection<Torrent>();
+
+    public MainViewModel(ITorrentDataService torrentDataService)
+    {
+        _torrentDataService = torrentDataService;
+    }
+    public async void OnNavigatedTo(object parameter)
+    {
+        Source.Clear();
+
+        // TODO: Replace with real data.
+        var data = await _torrentDataService.GetGridDataAsync();
+
+        foreach (var item in data)
+        {
+            Source.Add(item);
+        }
+    }
+
+    public void OnNavigatedFrom()
     {
     }
 }
