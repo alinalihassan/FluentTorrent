@@ -2,143 +2,115 @@
     x:Class="FluentTorrent.Views.ShellPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:helpers="using:FluentTorrent.Helpers"
     xmlns:behaviors="using:FluentTorrent.Behaviors"
+    xmlns:helpers="using:FluentTorrent.Helpers"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
     Loaded="OnLoaded">
 
     <Page.Resources>
-        <!--This top margin is the height of the custom TitleBar-->
+        <!--  This top margin is the height of the custom TitleBar  -->
         <Thickness x:Key="NavigationViewContentMargin">0,0,0,0</Thickness>
         <Thickness x:Key="NavigationViewContentGridBorderThickness">0</Thickness>
-        <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent"></SolidColorBrush>
+        <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent" />
     </Page.Resources>
 
     <Grid>
-        <Grid x:Name="AppTitleBar"
-              IsHitTestVisible="True"
-              Canvas.ZIndex="1"
-              Height="48"
-              Background="Transparent"
-              VerticalAlignment="Top">
-            <Image Source="/Assets/WindowIcon.ico"
-                   HorizontalAlignment="Left"
-                   Width="16"
-                   Height="16" />
-            <TextBlock x:Name="AppTitleBarText"
-                       VerticalAlignment="Center"
-                       TextWrapping="NoWrap"
-                       Style="{StaticResource CaptionTextBlockStyle}"
-                       Margin="28,0,0,0"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--  App Title Bar  -->
+        <Grid
+            x:Name="AppTitleBar"
+            Height="48"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            Canvas.ZIndex="1"
+            IsHitTestVisible="True">
+            <Image
+                Width="16"
+                Height="16"
+                HorizontalAlignment="Left"
+                Source="/Assets/WindowIcon.ico" />
+            <TextBlock
+                x:Name="AppTitleBarText"
+                Margin="28,0,0,0"
+                VerticalAlignment="Center"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                TextWrapping="NoWrap" />
         </Grid>
-        <NavigationView
-            x:Name="NavigationViewControl"
-            Canvas.ZIndex="0"
-            IsBackButtonVisible="Collapsed"
-            IsTitleBarAutoPaddingEnabled="False"
-            SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}"
-            IsSettingsVisible="True"
-            IsPaneToggleButtonVisible="False"
-            PaneDisplayMode="LeftCompact"
-            DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
-            Header="{x:Bind ((ContentControl)ViewModel.Selected).Content, Mode=OneWay}">
 
-            <!--<NavigationView.MenuItemTemplate>
-                <DataTemplate>
-                    <StackPanel Margin="0,8,8,8">
-                        <ContentPresenter HorizontalAlignment="Center" Content="{Binding Icon}" Padding="4" />
-                        <TextBlock  HorizontalAlignment="Center" Text="{Binding Content, Mode=OneWay}" Margin="0,2,0,0" />
-                    </StackPanel>
-                </DataTemplate>
-            </NavigationView.MenuItemTemplate>-->
+        <!--  Navigation Wrapper  -->
+        <Grid Grid.Row="1">
+            <NavigationView
+                x:Name="NavigationViewControl"
+                Canvas.ZIndex="0"
+                CompactPaneLength="76"
+                DisplayModeChanged="NavigationViewControl_DisplayModeChanged"
+                IsBackButtonVisible="Collapsed"
+                IsPaneToggleButtonVisible="False"
+                IsSettingsVisible="False"
+                IsTitleBarAutoPaddingEnabled="False"
+                PaneDisplayMode="LeftCompact"
+                SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
 
-            <NavigationView.MenuItems>
-                <NavigationViewItem Margin="0,43,0,0" x:Uid="Shell_Main" helpers:NavigationHelper.NavigateTo="FluentTorrent.ViewModels.MainViewModel">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe71d;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_Main" helpers:NavigationHelper.NavigateTo="FluentTorrent.ViewModels.MainViewModel">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe896;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_Main" helpers:NavigationHelper.NavigateTo="FluentTorrent.ViewModels.MainViewModel">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe769;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
-            </NavigationView.MenuItems>
+                <!--  TODO: Add some animations and behaviors to the items  -->
+                <NavigationView.MenuItemTemplate>
+                    <DataTemplate>
+                        <NavigationViewItem Height="64" Tag="{Binding Content, Mode=OneWay}">
+                            <Grid
+                                Margin="-8,0,0,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                RowSpacing="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
 
-            <i:Interaction.Behaviors>
-                <behaviors:NavigationViewHeaderBehavior
-                    DefaultHeader="{x:Bind ((ContentControl)ViewModel.Selected).Content, Mode=OneWay}">
-                    <behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
-                        <DataTemplate>
-                            <Grid>
+                                <ContentPresenter
+                                    Padding="4"
+                                    HorizontalAlignment="Center"
+                                    Content="{Binding Icon}" />
                                 <TextBlock
-                                    Text="{Binding}"
-                                    Style="{ThemeResource TitleTextBlockStyle}" />
+                                    x:Name="NavigationViewItemNameTextBlock"
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Center"
+                                    FontSize="10"
+                                    Foreground="{ThemeResource ApplicationSecondaryForegroundThemeBrush}"
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Text="{Binding Content, Mode=OneWay}" />
                             </Grid>
-                        </DataTemplate>
-                    </behaviors:NavigationViewHeaderBehavior.DefaultHeaderTemplate>
-                </behaviors:NavigationViewHeaderBehavior>
-            </i:Interaction.Behaviors>
-            
-            <!--<StackPanel>
-                <CommandBar HorizontalAlignment="Left" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                    <AppBarButton Icon="Add" Label="Add Torrent"/>
-                    <AppBarButton Icon="Play" Label="Resume" IsEnabled="False"/>
-                    <AppBarButton Icon="Pause" Label="Pause"/>
-                    <AppBarSeparator/>
-                    <AppBarButton Icon="Delete" Label="Delete"/>
-                </CommandBar>
-                <Grid Margin="{StaticResource NavigationViewPageContentMargin}">
-                    <Frame x:Name="NavigationFrame" />
-                </Grid>
-            </StackPanel>-->
+                        </NavigationViewItem>
+                    </DataTemplate>
+                </NavigationView.MenuItemTemplate>
 
-            <Grid Margin="0,43,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <!--  Menu Items  -->
+                <!--  TODO: make them filters instead of actual navigation redirects  -->
+                <NavigationView.MenuItems>
+                    <NavigationViewItem
+                        x:Uid="Shell_Main"
+                        Margin="0,43,0,0"
+                        helpers:NavigationHelper.NavigateTo="FluentTorrent.ViewModels.MainViewModel">
+                        <NavigationViewItem.Icon>
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe71d;" />
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                    <NavigationViewItem x:Uid="Shell_Main" helpers:NavigationHelper.NavigateTo="FluentTorrent.ViewModels.MainViewModel">
+                        <NavigationViewItem.Icon>
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe896;" />
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                    <NavigationViewItem x:Uid="Shell_Main" helpers:NavigationHelper.NavigateTo="FluentTorrent.ViewModels.MainViewModel">
+                        <NavigationViewItem.Icon>
+                            <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe769;" />
+                        </NavigationViewItem.Icon>
+                    </NavigationViewItem>
+                </NavigationView.MenuItems>
 
-                <StackPanel>
-                    <CommandBar HorizontalAlignment="Left" Background="Transparent" IsOpen="False" DefaultLabelPosition="Right" OverflowButtonVisibility="Collapsed">
-                        <AppBarButton Icon="Add" Label="Add Torrent"/>
-                        <AppBarButton Icon="Play" Label="Resume" IsEnabled="False"/>
-                        <AppBarButton Icon="Pause" Label="Pause"/>
-                        <AppBarSeparator/>
-                        <AppBarButton Icon="Delete" Label="Delete"/>
-                    </CommandBar>
-                </StackPanel>
-
-                <Border Grid.Row="1" 
-                        Height="Auto" 
-                        Background="{ThemeResource LayerFillColorDefaultBrush}"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Stretch"
-                        Margin="0"
-                        CornerRadius="8"
-                        BorderThickness="1"
-                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
-                    <!--<TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Content here!</TextBlock>-->
-                    <Frame x:Name="NavigationFrame" />
-                </Border>
-                <Border Grid.Row="2" 
-                        Height="250"
-                        Background="{ThemeResource LayerFillColorDefaultBrush}"
-                        VerticalAlignment="Top" 
-                        HorizontalAlignment="Stretch"
-                        Margin="0" 
-                        CornerRadius="8"
-                        BorderThickness="1"
-                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}">
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Content here!</TextBlock>
-                </Border>
-            </Grid>
-        </NavigationView>
+                <Frame x:Name="NavigationFrame" Margin="0,-43,0,0" />
+            </NavigationView>
+        </Grid>
     </Grid>
 </Page>

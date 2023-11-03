@@ -25,7 +25,24 @@ public class TorrentDataService : ITorrentDataService
             new Torrent(){
                 Id = 1,
                 Name = "Cyberpunk",
-                Url = "https://google.com"}
+                Url = "https://google.com"},
+
+            new Torrent(){
+                Id = 2,
+                Name = "Cyberpunk",
+                Url = "https://google.com"},
+            new Torrent(){
+                Id = 2,
+                Name = "Cyberpunk",
+                Url = "https://google.com"},
+            new Torrent(){
+                Id = 2,
+                Name = "Cyberpunk",
+                Url = "https://google.com"},
+            new Torrent(){
+                Id = 2,
+                Name = "Cyberpunk",
+                Url = "https://google.com"},
         };
     }
 
