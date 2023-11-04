@@ -34,13 +34,13 @@ public sealed partial class MainPage : Page
     {
         if (sender is DataGridRow row)
         {
-            MenuFlyout flyout = new MenuFlyout();
+            var flyout = new MenuFlyout();
 
             // Make items
-            MenuFlyoutItem flyout_resume = new MenuFlyoutItem { Text = "Resume", Icon = new FontIcon { Glyph = "\uE768" } };
-            MenuFlyoutItem flyout_pause = new MenuFlyoutItem { Text = "Pause", Icon = new FontIcon { Glyph = "\uE769" } };
-            MenuFlyoutSeparator flyout_sep1 = new MenuFlyoutSeparator();
-            MenuFlyoutItem flyout_delete = new MenuFlyoutItem { Text = "Delete", Icon = new FontIcon { Glyph = "\uE74D" } };
+            var flyout_resume = new MenuFlyoutItem { Text = "Resume", Icon = new FontIcon { Glyph = "\uE768" } };
+            var flyout_pause = new MenuFlyoutItem { Text = "Pause", Icon = new FontIcon { Glyph = "\uE769" } };
+            var flyout_sep1 = new MenuFlyoutSeparator();
+            var flyout_delete = new MenuFlyoutItem { Text = "Delete", Icon = new FontIcon { Glyph = "\uE74D" } };
 
             // Add items
             flyout.Items.Add(flyout_resume);
@@ -92,7 +92,7 @@ public sealed partial class MainPage : Page
 
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
         {
-            string[] magnetLinks = dialogContent.GetMagnetLinks();
+            var _ = dialogContent.GetMagnetLinks();
             // TODO: Do something with magnet links
         }
     }
@@ -113,7 +113,7 @@ public sealed partial class MainPage : Page
 
         if (await dialog.ShowAsync() == ContentDialogResult.Primary)
         {
-            bool deleteFiles = dialogContent.ShouldDeleteFiles();
+            var _ = dialogContent.ShouldDeleteFiles();
             // TODO: Delete torrent and file
         }
     }
