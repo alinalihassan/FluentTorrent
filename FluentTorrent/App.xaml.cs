@@ -112,9 +112,6 @@ public partial class App : Application
         TorrentEngine = new ClientEngine(settingBuilder.ToSettings());
         var torrentServiceManager = GetService<ITorrentServiceManager>();
         var manager = await torrentServiceManager.AddTorrentFile("C:\\Users\\super\\Downloads\\ubuntu-23.10.1-desktop-amd64.iso.torrent");
-
-        var service = torrentServiceManager.FindTorrentService(manager);
-        System.Diagnostics.Debug.WriteLine($"Found {service.torrentManager}");
     }
 
     #region Events
