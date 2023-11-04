@@ -13,7 +13,11 @@ public class TorrentItem
         get; set;
     }
 
-    TorrentItem(TorrentManager torrent, CancellationToken cancellationToken)
+    public FastResume? resume
+    {
+    get; set; }
+
+    public TorrentItem(TorrentManager torrent, CancellationToken cancellationToken)
     {
         this.torrent = torrent;
         this.cancellationToken = cancellationToken;

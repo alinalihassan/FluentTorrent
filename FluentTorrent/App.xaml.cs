@@ -53,7 +53,8 @@ public partial class App : Application
     {
         get; set;
     }
-    public static readonly string DownloadsFolder;
+    // TODO: Change this into options that the user can set a default and set per torrent
+    public static readonly string DownloadsFolder = "C:\\Users\\super\\Downloads";
 
     public App()
     {
@@ -83,6 +84,7 @@ public partial class App : Application
             // Core Services
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<ITorrentDataService, TorrentDataService>();
+            services.AddSingleton<ITorrentServiceManager, TorrentServiceManager>();
 
             // Views and ViewModels
             services.AddTransient<SettingsViewModel>();
@@ -104,22 +106,18 @@ public partial class App : Application
         UnhandledException += App_UnhandledException;
     }
 
-    private void setTorrentClient()
+    private async void setTorrentClient()
     {
         var settingBuilder = new EngineSettingsBuilder();
         TorrentEngine = new ClientEngine(settingBuilder.ToSettings());
+        var torrentServiceManager = GetService<ITorrentServiceManager>();
+        var manager = await torrentServiceManager.AddTorrentFile("C:\\Users\\super\\Downloads\\ubuntu-23.10.1-desktop-amd64.iso.torrent");
+
+        var service = torrentServiceManager.FindTorrentService(manager);
+        System.Diagnostics.Debug.WriteLine($"Found {service.torrentManager}");
     }
 
-    public static async void addTorrentFile(string path)
-    {
-        var manager  = await TorrentEngine.AddAsync(path, DownloadsFolder);
-    }
-    public static async void addMagnetLink(string links)
-    {
-        MagnetLink.TryParse(links, out var link);
-        var manager = await TorrentEngine.AddAsync(link, DownloadsFolder);
-    }
-
+    #region Events
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
         // TODO: Log and handle exceptions as appropriate.
@@ -134,4 +132,5 @@ public partial class App : Application
 
         await GetService<IActivationService>().ActivateAsync(args);
     }
+    #endregion
 }
