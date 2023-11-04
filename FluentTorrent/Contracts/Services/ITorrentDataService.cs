@@ -1,7 +1,8 @@
 ﻿using FluentTorrent.Models;
+using MonoTorrent.Client;
 
 namespace FluentTorrent.Contracts.Services;
 public interface ITorrentDataService
 {
-    Task<IEnumerable<TorrentItem>> GetGridDataAsync();
+    Task<IEnumerable<TorrentManager>> GetGridDataAsync();
 }

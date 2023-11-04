@@ -1,5 +1,4 @@
-﻿using System.Net;
-using FluentTorrent.Activation;
+﻿using FluentTorrent.Activation;
 using FluentTorrent.Contracts.Services;
 using FluentTorrent.Helpers;
 using FluentTorrent.Models;
@@ -11,10 +10,7 @@ using FluentTorrent.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
-using MonoTorrent;
 using MonoTorrent.Client;
-using Newtonsoft.Json.Linq;
-using Windows.Storage;
 
 namespace FluentTorrent;
 
@@ -109,9 +105,11 @@ public partial class App : Application
     private async void setTorrentClient()
     {
         var settingBuilder = new EngineSettingsBuilder();
+        settingBuilder.DiskCacheBytes = 0; // Disable cache for testing purposes
         TorrentEngine = new ClientEngine(settingBuilder.ToSettings());
+
         var torrentServiceManager = GetService<ITorrentServiceManager>();
-        var manager = await torrentServiceManager.AddTorrentFile("C:\\Users\\super\\Downloads\\ubuntu-23.10.1-desktop-amd64.iso.torrent");
+        await torrentServiceManager.AddTorrentFile("C:\\Users\\super\\Downloads\\ubuntu-23.10.1-desktop-amd64.iso.torrent");
     }
 
     #region Events

@@ -1,28 +1,28 @@
 ﻿using FluentTorrent.Contracts.Services;
-using FluentTorrent.Models;
+using MonoTorrent.Client;
 
 namespace FluentTorrent.Services;
 
 public class TorrentDataService : ITorrentDataService
 {
-    private List<TorrentItem> _allTorrents;
+    private List<TorrentManager> _allTorrents;
 
     public TorrentDataService()
     {
 
     }
 
-    private static IEnumerable<TorrentItem> AllTorrents()
+    private static IEnumerable<TorrentManager> AllTorrents()
     {
-        return new List<TorrentItem>()
+        return new List<TorrentManager>()
         {
             
         };
     }
 
-    public async Task<IEnumerable<TorrentItem>> GetGridDataAsync()
+    public async Task<IEnumerable<TorrentManager>> GetGridDataAsync()
     {
-        _allTorrents ??= new List<TorrentItem>(AllTorrents());
+        _allTorrents ??= new List<TorrentManager>(AllTorrents());
 
         await Task.CompletedTask;
         return _allTorrents;

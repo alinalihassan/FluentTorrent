@@ -1,15 +1,17 @@
-﻿using FluentTorrent.Contracts.Services;
+﻿using System.Collections.ObjectModel;
+using FluentTorrent.Contracts.Services;
 using MonoTorrent;
 using MonoTorrent.Client;
 
 namespace FluentTorrent.Services;
 public class TorrentServiceManager: IDisposable, ITorrentServiceManager
 {
-    private List<ITorrentService> _services;
+    private readonly ObservableCollection<ITorrentService> _services;
+    public IReadOnlyList<ITorrentService> Services => _services;
 
     public TorrentServiceManager()
     {
-        _services = new List<ITorrentService>();
+        _services = new ObservableCollection<ITorrentService>();
     }
 
     public async Task<TorrentManager> AddTorrentFile(string path)
@@ -45,6 +47,20 @@ public class TorrentServiceManager: IDisposable, ITorrentServiceManager
 
         return null;
     }
+
+    public ObservableCollection<TorrentManager> GetTorrentManagers()
+    {
+        var list = new ObservableCollection<TorrentManager>();
+
+        foreach (var service in _services)
+        {
+            list.Add(service.torrentManager);
+        }
+
+        return list;
+    }
+
+    public ObservableCollection<ITorrentService> GetTorrentServices() => _services;
 
     public void Dispose()
     {
