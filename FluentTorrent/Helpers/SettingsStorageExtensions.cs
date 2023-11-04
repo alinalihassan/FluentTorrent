@@ -1,6 +1,4 @@
-﻿using FluentTorrent.Core.Helpers;
-
-using Windows.Storage;
+﻿using Windows.Storage;
 using Windows.Storage.Streams;
 
 namespace FluentTorrent.Helpers;

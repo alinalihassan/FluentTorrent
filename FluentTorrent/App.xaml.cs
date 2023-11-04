@@ -1,7 +1,6 @@
-﻿using FluentTorrent.Activation;
+﻿using System.Net;
+using FluentTorrent.Activation;
 using FluentTorrent.Contracts.Services;
-using FluentTorrent.Core.Contracts.Services;
-using FluentTorrent.Core.Services;
 using FluentTorrent.Helpers;
 using FluentTorrent.Models;
 using FluentTorrent.Notifications;
@@ -12,6 +11,10 @@ using FluentTorrent.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using MonoTorrent;
+using MonoTorrent.Client;
+using Newtonsoft.Json.Linq;
+using Windows.Storage;
 
 namespace FluentTorrent;
 
@@ -31,7 +34,7 @@ public partial class App : Application
     public static T GetService<T>()
         where T : class
     {
-        if ((App.Current as App)!.Host.Services.GetService(typeof(T)) is not T service)
+        if ((Current as App)!.Host.Services.GetService(typeof(T)) is not T service)
         {
             throw new ArgumentException($"{typeof(T)} needs to be registered in ConfigureServices within App.xaml.cs.");
         }
@@ -45,6 +48,12 @@ public partial class App : Application
     {
         get; set;
     }
+
+    public static ClientEngine TorrentEngine
+    {
+        get; set;
+    }
+    public static readonly string DownloadsFolder;
 
     public App()
     {
@@ -90,9 +99,25 @@ public partial class App : Application
 
         GetService<IAppNotificationService>().Initialize();
 
+        setTorrentClient();
 
-        Console.WriteLine("Hello World");
         UnhandledException += App_UnhandledException;
+    }
+
+    private void setTorrentClient()
+    {
+        var settingBuilder = new EngineSettingsBuilder();
+        TorrentEngine = new ClientEngine(settingBuilder.ToSettings());
+    }
+
+    public static async void addTorrentFile(string path)
+    {
+        var manager  = await TorrentEngine.AddAsync(path, DownloadsFolder);
+    }
+    public static async void addMagnetLink(string links)
+    {
+        MagnetLink.TryParse(links, out var link);
+        var manager = await TorrentEngine.AddAsync(link, DownloadsFolder);
     }
 
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)

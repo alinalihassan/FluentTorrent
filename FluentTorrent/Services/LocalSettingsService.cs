@@ -1,6 +1,4 @@
 ﻿using FluentTorrent.Contracts.Services;
-using FluentTorrent.Core.Contracts.Services;
-using FluentTorrent.Core.Helpers;
 using FluentTorrent.Helpers;
 using FluentTorrent.Models;
 

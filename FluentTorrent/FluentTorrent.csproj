@@ -25,11 +25,9 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.3.230502000" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
+    <PackageReference Include="MonoTorrent" Version="2.0.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="WinUIEx" Version="2.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\FluentTorrent.Core\FluentTorrent.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="appsettings.json">

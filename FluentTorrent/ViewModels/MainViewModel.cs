@@ -11,7 +11,7 @@ public partial class MainViewModel : ObservableRecipient, INavigationAware
 
     private readonly ITorrentDataService _torrentDataService;
 
-    public ObservableCollection<Torrent> Source { get; } = new ObservableCollection<Torrent>();
+    public ObservableCollection<TorrentItem> Source { get; } = new ObservableCollection<TorrentItem>();
 
     public MainViewModel(ITorrentDataService torrentDataService)
     {

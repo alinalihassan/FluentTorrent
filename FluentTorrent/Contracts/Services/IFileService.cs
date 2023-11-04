@@ -1,4 +1,4 @@
-﻿namespace FluentTorrent.Core.Contracts.Services;
+﻿namespace FluentTorrent.Contracts.Services;
 
 public interface IFileService
 {

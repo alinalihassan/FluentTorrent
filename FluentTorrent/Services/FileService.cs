@@ -1,10 +1,9 @@
 ﻿using System.Text;
 
-using FluentTorrent.Core.Contracts.Services;
-
+using FluentTorrent.Contracts.Services;
 using Newtonsoft.Json;
 
-namespace FluentTorrent.Core.Services;
+namespace FluentTorrent.Services;
 
 public class FileService : IFileService
 {

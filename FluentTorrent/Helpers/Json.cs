@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace FluentTorrent.Core.Helpers;
+namespace FluentTorrent.Helpers;
 
 public static class Json
 {
