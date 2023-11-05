@@ -35,17 +35,10 @@ public class TorrentItem : IAsyncDisposable, INotifyPropertyChanged
 
     private void notifyPropertiesChanged()
     {
-        try
+        App.MainWindow.DispatcherQueue.TryEnqueue(() =>
         {
-            App.MainWindow.DispatcherQueue.TryEnqueue(() =>
-            {
-                try
-                {
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
-                }
-                catch { }
-            });
-        } catch { }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
+        });
     }
 
     #region Static Instantiation Methods
