@@ -73,12 +73,11 @@
                     </controls:DataGrid.Resources>
 
                     <controls:DataGrid.Columns>
-                        <controls:DataGridTextColumn Binding="{Binding Torrent}" Header="Name" />
-                        <controls:DataGridTextColumn Binding="{Binding BitField.Length}" Header="Size" />
-                        <controls:DataGridTextColumn Binding="{Binding BitField.TrueCount}" Header="Remaining" />
+                        <controls:DataGridTextColumn Binding="{Binding Name}" Header="Name" />
+                        <controls:DataGridTextColumn Binding="{Binding Size}" Header="Size" />
+                        <controls:DataGridTextColumn Binding="{Binding RemainingBytes}" Header="Remaining" />
                         <controls:DataGridTextColumn Binding="{Binding State}" Header="Status" />
                         <controls:DataGridTextColumn Binding="{Binding Progress}" Header="Progress Number" />
-                        <controls:DataGridTextColumn Binding="{Binding Complete}" Header="Completed" />
                         <controls:DataGridTemplateColumn Header="Progress">
                             <controls:DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

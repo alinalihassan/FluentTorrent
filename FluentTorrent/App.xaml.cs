@@ -1,4 +1,5 @@
-﻿using FluentTorrent.Activation;
+﻿using System.Text;
+using FluentTorrent.Activation;
 using FluentTorrent.Contracts.Services;
 using FluentTorrent.Helpers;
 using FluentTorrent.Models;
@@ -45,12 +46,9 @@ public partial class App : Application
         get; set;
     }
 
-    public static ClientEngine TorrentEngine
-    {
-        get; set;
-    }
     // TODO: Change this into options that the user can set a default and set per torrent
     public static readonly string DownloadsFolder = "C:\\Users\\super\\Downloads";
+    public static readonly ClientEngine TorrentEngine = new(getTorrentOptions());
 
     public App()
     {
@@ -97,19 +95,20 @@ public partial class App : Application
 
         GetService<IAppNotificationService>().Initialize();
 
-        setTorrentClient();
-
         UnhandledException += App_UnhandledException;
     }
 
-    private async void setTorrentClient()
+    private static EngineSettings getTorrentOptions()
     {
         var settingBuilder = new EngineSettingsBuilder();
         settingBuilder.DiskCacheBytes = 0; // Disable cache for testing purposes
-        TorrentEngine = new ClientEngine(settingBuilder.ToSettings());
+        return settingBuilder.ToSettings();
+    }
 
-        var torrentServiceManager = GetService<ITorrentServiceManager>();
-        await torrentServiceManager.AddTorrentFile("C:\\Users\\super\\Downloads\\ubuntu-23.10.1-desktop-amd64.iso.torrent");
+    private void setTorrentClient()
+    {
+        //var torrentServiceManager = GetService<ITorrentServiceManager>();
+        //await torrentServiceManager.AddTorrentFile("C:\\Users\\super\\Downloads\\ubuntu-23.10.1-desktop-amd64.iso.torrent");
     }
 
     #region Events

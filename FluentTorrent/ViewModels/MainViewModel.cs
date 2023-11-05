@@ -2,30 +2,32 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentTorrent.Contracts.Services;
 using FluentTorrent.Contracts.ViewModels;
-using MonoTorrent.Client;
+using FluentTorrent.Models;
 
 namespace FluentTorrent.ViewModels;
 
 public partial class MainViewModel : ObservableRecipient, INavigationAware
 {
-    private readonly ITorrentServiceManager _torrentServiceManager;
+    private readonly ITorrentDataService _torrentDataService;
 
-    public ObservableCollection<TorrentManager> Source { get; } = new ObservableCollection<TorrentManager>();
+    public ObservableCollection<TorrentItem> Source { get; } = new ObservableCollection<TorrentItem>();
 
-    public MainViewModel(ITorrentServiceManager torrentServiceManager)
+    public MainViewModel(ITorrentDataService torrentDataService)
     {
-        _torrentServiceManager = torrentServiceManager;
+        _torrentDataService = torrentDataService;
     }
+
     public async void OnNavigatedTo(object parameter)
     {
         Source.Clear();
 
         await Task.Delay(500);
-        var torrentManagers = _torrentServiceManager.GetTorrentManagers();
 
-        foreach ( var torrentManager in torrentManagers )
+        var torrents = await _torrentDataService.GetGridDataAsync();
+
+        foreach ( var torrent in torrents)
         {
-            Source.Add(torrentManager);
+            Source.Add(torrent);
         }
     }
 
