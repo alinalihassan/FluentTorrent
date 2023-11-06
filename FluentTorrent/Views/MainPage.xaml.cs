@@ -10,6 +10,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
 using MonoTorrent.Client;
+using Windows.System;
 
 namespace FluentTorrent.Views;
 
@@ -42,16 +43,29 @@ public sealed partial class MainPage : Page
 
         var flyout = new MenuFlyout();
 
-        var flyout_resume = new MenuFlyoutItem { Text = "Resume", Icon = new FontIcon { Glyph = "\uE768" } };
-        flyout_resume.Click += async (s, args) =>
+        MenuFlyoutItem flyout_toggle_state;
+        if (torrentItem.State == TorrentState.Stopped || torrentItem.State == TorrentState.Stopping || torrentItem.State == TorrentState.Paused)
         {
-            await torrentItem.Start();
-        };
-
-        var flyout_pause = new MenuFlyoutItem { Text = "Pause", Icon = new FontIcon { Glyph = "\uE769" } };
-        flyout_pause.Click += async (s, args) =>
+            flyout_toggle_state = new MenuFlyoutItem { Text = "Resume", Icon = new FontIcon { Glyph = "\uE768" } };
+            flyout_toggle_state.Click += async (s, args) =>
+            {
+                await torrentItem.Start();
+            };
+        }
+        else
         {
-            await torrentItem.Pause();
+            flyout_toggle_state = new MenuFlyoutItem { Text = "Pause", Icon = new FontIcon { Glyph = "\uE769" } };
+            flyout_toggle_state.Click += async (s, args) =>
+            {
+                await torrentItem.Pause();
+            };
+        }
+        
+        // TODO: Make it Open the containing folder if it's not a single file
+        var flyout_open_folder = new MenuFlyoutItem { Text = "Open Folder", Icon = new FontIcon { Glyph = "\uE8b7" } };
+        flyout_open_folder.Click += async (s, args) =>
+        {
+            await Launcher.LaunchFolderAsync(await StorageFolder.GetFolderFromPathAsync(App.DownloadsFolder));
         };
 
         var flyout_sep1 = new MenuFlyoutSeparator();
@@ -80,8 +94,8 @@ public sealed partial class MainPage : Page
         };
 
         // Add items to the flyout
-        flyout.Items.Add(flyout_resume);
-        flyout.Items.Add(flyout_pause);
+        flyout.Items.Add(flyout_toggle_state);
+        flyout.Items.Add(flyout_open_folder);
         flyout.Items.Add(flyout_sep1);
         flyout.Items.Add(flyout_delete);
 
