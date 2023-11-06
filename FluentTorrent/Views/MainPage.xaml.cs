@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using CommunityToolkit.WinUI.UI.Controls;
 using FluentTorrent.Models;
-using FluentTorrent.Services;
 using FluentTorrent.ViewModels;
 using FluentTorrent.Views.Modals;
 using Microsoft.UI.Xaml;
@@ -10,6 +9,7 @@ using Microsoft.UI.Xaml.Input;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
+using MonoTorrent.Client;
 
 namespace FluentTorrent.Views;
 
@@ -57,9 +57,26 @@ public sealed partial class MainPage : Page
         var flyout_sep1 = new MenuFlyoutSeparator();
 
         var flyout_delete = new MenuFlyoutItem { Text = "Delete", Icon = new FontIcon { Glyph = "\uE74D" } };
-        flyout_delete.Click += (s, args) =>
+        flyout_delete.Click += async (s, args) =>
         {
-            // Handle Delete click for the specific TorrentItem
+            var dialogContent = new DeleteDialogContent();
+            var dialog = new ContentDialog()
+            {
+                XamlRoot = XamlRoot,
+                Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style,
+                Title = "Remove Torrent",
+                PrimaryButtonText = "Delete",
+                CloseButtonText = "Cancel",
+                DefaultButton = ContentDialogButton.Primary,
+                Content = dialogContent
+            };
+
+            if (await dialog.ShowAsync() == ContentDialogResult.Primary)
+            {
+                var shouldDeleteFiles = dialogContent.ShouldDeleteFiles();
+                await ViewModel.TorrentDataService.RemoveTorrent(torrentItem, shouldDeleteFiles);
+                ViewModel.RefreshData();
+            }
         };
 
         // Add items to the flyout
@@ -102,7 +119,6 @@ public sealed partial class MainPage : Page
         if (file != null)
         {
             await ViewModel.TorrentDataService.AddTorrentFile(file.Path);
-            Debug.WriteLine($"DataService length {ViewModel.TorrentDataService.GetAllTorrents().ToArray().Length}");
         }
     }
 

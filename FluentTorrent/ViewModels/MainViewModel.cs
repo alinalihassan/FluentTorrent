@@ -21,7 +21,7 @@ public partial class MainViewModel : ObservableRecipient, INavigationAware
     private void OnDataUpdated(object? sender, EventArgs e) => RefreshData();
     public void OnNavigatedTo(object parameter) => RefreshData();
 
-    private void RefreshData()
+    public void RefreshData()
     {
         Source.Clear();
 

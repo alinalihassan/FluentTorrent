@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using MonoTorrent;
 using MonoTorrent.Client;
 
@@ -72,25 +73,25 @@ public class TorrentItem : IAsyncDisposable, INotifyPropertyChanged
         await _manager.StopAsync();
     }
 
-    public async Task Delete()
+    public async Task Delete(bool shouldDeleteFiles)
     {
-        if (_manager != null)
+        await _manager.StopAsync();
+
+        Debug.WriteLine($"Deleting with shouldDeleteFiles = {shouldDeleteFiles}");
+        await App.TorrentEngine.RemoveAsync(_manager, shouldDeleteFiles ? RemoveMode.CacheDataAndDownloadedData : RemoveMode.CacheDataOnly);
+
+        if (shouldDeleteFiles)
         {
-            await Stop();
-            await App.TorrentEngine.RemoveAsync(_manager);
-
-            // Delete the associated files
-            foreach (TorrentFile file in _manager.Torrent.Files)
-            {
-                var filePath = Path.Combine(App.DownloadsFolder, file.Path);
-                if (File.Exists(filePath))
-                {
-                    File.Delete(filePath);
-                }
-            }
-
-            await DisposeAsync();
+            // TODO: Delete the folders
+            Debug.WriteLine($"Save path {_manager.SavePath}");
+            Debug.WriteLine($"Files: {Directory.GetFiles(_manager.SavePath, "*", SearchOption.AllDirectories)}");
+            //if (!Directory.GetFiles(_manager.SavePath, "*", SearchOption.AllDirectories).Any())
+            //{
+            //    Directory.Delete(_manager.SavePath, true);
+            //}
         }
+
+        Debug.WriteLine($"Deleted {Name}");
     }
 
     public async ValueTask DisposeAsync()

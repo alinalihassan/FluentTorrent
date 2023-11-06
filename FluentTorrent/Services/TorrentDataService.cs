@@ -1,5 +1,7 @@
-﻿using FluentTorrent.Contracts.Services;
+﻿using System.Diagnostics;
+using FluentTorrent.Contracts.Services;
 using FluentTorrent.Models;
+using MonoTorrent.Client;
 
 namespace FluentTorrent.Services;
 
@@ -33,6 +35,14 @@ public class TorrentDataService : ITorrentDataService
 
         return torrent;
     }
+
+    public async Task RemoveTorrent(TorrentItem torrentItem, bool shouldDeleteFiles)
+    {
+        _allTorrents.Remove(torrentItem);
+        _ = torrentItem.Delete(shouldDeleteFiles);
+        Debug.WriteLine($"Torrent: {_allTorrents.ToArray().Length}");
+        Debug.WriteLine($"Torrent: {_allTorrents.ToArray().Length}");
+    } 
 
     public IEnumerable<TorrentItem> GetAllTorrents()
     {
