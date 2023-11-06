@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
 using FluentTorrent.Activation;
 using FluentTorrent.Contracts.Services;
 using FluentTorrent.Helpers;
@@ -11,7 +11,10 @@ using FluentTorrent.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
+using Microsoft.Windows.AppLifecycle;
 using MonoTorrent.Client;
+using Windows.ApplicationModel.Activation;
+using Windows.Storage;
 
 namespace FluentTorrent;
 
@@ -60,7 +63,7 @@ public partial class App : Application
         ConfigureServices((context, services) =>
         {
             // Default Activation Handler
-            services.AddTransient<ActivationHandler<LaunchActivatedEventArgs>, DefaultActivationHandler>();
+            services.AddTransient<ActivationHandler<Microsoft.UI.Xaml.LaunchActivatedEventArgs>, DefaultActivationHandler>();
 
             // Other Activation Handlers
             services.AddTransient<IActivationHandler, AppNotificationActivationHandler>();
@@ -78,7 +81,6 @@ public partial class App : Application
             // Core Services
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<ITorrentDataService, TorrentDataService>();
-            services.AddSingleton<ITorrentServiceManager, TorrentServiceManager>();
 
             // Views and ViewModels
             services.AddTransient<SettingsViewModel>();
@@ -118,13 +120,23 @@ public partial class App : Application
         // https://docs.microsoft.com/windows/windows-app-sdk/api/winrt/microsoft.ui.xaml.application.unhandledexception.
     }
 
-    protected async override void OnLaunched(LaunchActivatedEventArgs args)
+    protected async override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
         base.OnLaunched(args);
 
+        // Show notification when launched
         GetService<IAppNotificationService>().Show(string.Format("AppNotificationSamplePayload".GetLocalized(), AppContext.BaseDirectory));
-
         await GetService<IActivationService>().ActivateAsync(args);
+
+        // TODO: Handle files/magnets
+        AppActivationArguments appActivationArguments = AppInstance.GetCurrent().GetActivatedEventArgs();
+
+        if (appActivationArguments.Kind is ExtendedActivationKind.File &&
+            appActivationArguments.Data is IFileActivatedEventArgs fileActivatedEventArgs &&
+            fileActivatedEventArgs.Files.FirstOrDefault() is IStorageFile storageFile)
+        {
+            Debug.WriteLine($"Hello file {storageFile.Path}");
+        }
     }
     #endregion
 }

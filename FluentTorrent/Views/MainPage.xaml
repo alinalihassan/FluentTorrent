@@ -40,7 +40,7 @@
 
                 <AppBarButton
                     Icon="Play"
-                    IsEnabled="False"
+                    IsEnabled="True"
                     Label="Resume" />
                 <AppBarButton Icon="Pause" Label="Pause" />
                 <AppBarSeparator />
@@ -72,7 +72,8 @@
                     GridLinesVisibility="None"
                     IsReadOnly="True"
                     ItemsSource="{x:Bind ViewModel.Source, Mode=OneWay}"
-                    LoadingRow="TorrentGrid_LoadingRow">
+                    LoadingRow="TorrentGrid_LoadingRow"
+                    SelectionChanged="TorrentGrid_SelectionChanged">
 
                     <controls:DataGrid.Resources>
                         <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundColor" Color="Transparent" />

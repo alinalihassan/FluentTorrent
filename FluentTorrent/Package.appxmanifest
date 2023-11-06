@@ -57,6 +57,22 @@
                   </com:ExeServer>
               </com:ComServer>
           </com:Extension>
+          <uap:Extension Category="windows.protocol">
+              <uap:Protocol Name="magnet">
+                  <uap:Logo>Assets\StoreLogo.png</uap:Logo>
+                  <uap:DisplayName>Fluent Torrent</uap:DisplayName>
+              </uap:Protocol>
+          </uap:Extension>
+          <uap:Extension Category="windows.fileTypeAssociation">
+              <uap:FileTypeAssociation Name=".torrent">
+                  <uap:SupportedFileTypes>
+                      <uap:FileType>.torrent</uap:FileType>
+                  </uap:SupportedFileTypes>
+                  <uap:EditFlags OpenIsSafe="true"/>
+                  <uap:Logo>Assets\StoreLogo.png</uap:Logo>
+                  <uap:DisplayName>Fluent Torrent</uap:DisplayName>
+              </uap:FileTypeAssociation>
+          </uap:Extension>
       </Extensions>
     </Application>
   </Applications>

@@ -1,8 +1,6 @@
-﻿using MonoTorrent.Client;
+﻿using System.ComponentModel;
 using MonoTorrent;
-using System.ComponentModel;
-using System.Diagnostics;
-using Windows.UI.Core;
+using MonoTorrent.Client;
 
 namespace FluentTorrent.Models;
 public class TorrentItem : IAsyncDisposable, INotifyPropertyChanged
@@ -20,20 +18,15 @@ public class TorrentItem : IAsyncDisposable, INotifyPropertyChanged
     public double DownloadSpeed => _manager.Monitor.DownloadSpeed;
     public double UploadSpeed => _manager.Monitor.UploadSpeed;
 
-    // Implement the INotifyPropertyChanged interface
-    public event PropertyChangedEventHandler? PropertyChanged;
-
     private TorrentItem(TorrentManager manager)
     {
         _manager = manager;
-        _manager.PieceHashed += _manager_PieceHashed;
-        _manager.TorrentStateChanged += _manager_TorrentStateChanged;
     }
 
-    private void _manager_TorrentStateChanged(object? sender, TorrentStateChangedEventArgs e) => notifyPropertiesChanged();
-    private void _manager_PieceHashed(object? sender, PieceHashedEventArgs e) => notifyPropertiesChanged();
+    // Implement the INotifyPropertyChanged interface
+    public event PropertyChangedEventHandler? PropertyChanged;
 
-    private void notifyPropertiesChanged()
+    public void NotifyPropertiesChanged()
     {
         App.MainWindow.DispatcherQueue.TryEnqueue(() =>
         {
@@ -77,6 +70,27 @@ public class TorrentItem : IAsyncDisposable, INotifyPropertyChanged
     public async Task Stop()
     {
         await _manager.StopAsync();
+    }
+
+    public async Task Delete()
+    {
+        if (_manager != null)
+        {
+            await Stop();
+            await App.TorrentEngine.RemoveAsync(_manager);
+
+            // Delete the associated files
+            foreach (TorrentFile file in _manager.Torrent.Files)
+            {
+                var filePath = Path.Combine(App.DownloadsFolder, file.Path);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+
+            await DisposeAsync();
+        }
     }
 
     public async ValueTask DisposeAsync()

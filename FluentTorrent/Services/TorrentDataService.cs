@@ -1,31 +1,41 @@
 ﻿using FluentTorrent.Contracts.Services;
 using FluentTorrent.Models;
-using MonoTorrent.Client;
 
 namespace FluentTorrent.Services;
 
 public class TorrentDataService : ITorrentDataService
 {
-    private List<TorrentItem> _allTorrents;
+    private readonly List<TorrentItem> _allTorrents = new();
+    public event EventHandler DataUpdated;
 
     public TorrentDataService()
     {
 
     }
-
-    private static async Task<IEnumerable<TorrentItem>> AllTorrents()
+    private void OnDataUpdated()
     {
-        return new List<TorrentItem>()
-        {
-            await TorrentItem.AddTorrentFile("C:\\Users\\super\\Downloads\\ubuntu-23.10.1-desktop-amd64.iso.torrent")
-        };
+        DataUpdated?.Invoke(this, EventArgs.Empty);
     }
 
-    public async Task<IEnumerable<TorrentItem>> GetGridDataAsync()
+    public async Task<TorrentItem> AddTorrentFile(string path)
     {
-        _allTorrents ??= new List<TorrentItem>(await AllTorrents());
+        var torrent = await TorrentItem.AddTorrentFile(path);
+        _allTorrents.Add(torrent);
+        OnDataUpdated();
 
-        await Task.CompletedTask;
+        return torrent;
+    }
+    public async Task<TorrentItem> AddMagnetLink(string links)
+    {
+        var torrent = await TorrentItem.AddMagnetLink(links);
+        _allTorrents.Add(torrent);
+        OnDataUpdated();
+
+        return torrent;
+    }
+
+    public IEnumerable<TorrentItem> GetAllTorrents()
+    {
         return _allTorrents;
     }
 }

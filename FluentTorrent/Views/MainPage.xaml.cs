@@ -1,4 +1,7 @@
-﻿using CommunityToolkit.WinUI.UI.Controls;
+﻿using System.Diagnostics;
+using CommunityToolkit.WinUI.UI.Controls;
+using FluentTorrent.Models;
+using FluentTorrent.Services;
 using FluentTorrent.ViewModels;
 using FluentTorrent.Views.Modals;
 using Microsoft.UI.Xaml;
@@ -32,25 +35,41 @@ public sealed partial class MainPage : Page
 
     private void TorrentGrid_RightTapped(object sender, RightTappedRoutedEventArgs e)
     {
-        if (sender is DataGridRow row)
+        if (!(sender is DataGridRow row) || !(row.DataContext is TorrentItem torrentItem))
         {
-            var flyout = new MenuFlyout();
-
-            // Make items
-            var flyout_resume = new MenuFlyoutItem { Text = "Resume", Icon = new FontIcon { Glyph = "\uE768" } };
-            var flyout_pause = new MenuFlyoutItem { Text = "Pause", Icon = new FontIcon { Glyph = "\uE769" } };
-            var flyout_sep1 = new MenuFlyoutSeparator();
-            var flyout_delete = new MenuFlyoutItem { Text = "Delete", Icon = new FontIcon { Glyph = "\uE74D" } };
-
-            // Add items
-            flyout.Items.Add(flyout_resume);
-            flyout.Items.Add(flyout_pause);
-            flyout.Items.Add(flyout_sep1);
-            flyout.Items.Add(flyout_delete);
-
-            // Show the MenuFlyout
-            flyout.ShowAt(row, e.GetPosition(row));
+            return;
         }
+
+        var flyout = new MenuFlyout();
+
+        var flyout_resume = new MenuFlyoutItem { Text = "Resume", Icon = new FontIcon { Glyph = "\uE768" } };
+        flyout_resume.Click += async (s, args) =>
+        {
+            await torrentItem.Start();
+        };
+
+        var flyout_pause = new MenuFlyoutItem { Text = "Pause", Icon = new FontIcon { Glyph = "\uE769" } };
+        flyout_pause.Click += async (s, args) =>
+        {
+            await torrentItem.Pause();
+        };
+
+        var flyout_sep1 = new MenuFlyoutSeparator();
+
+        var flyout_delete = new MenuFlyoutItem { Text = "Delete", Icon = new FontIcon { Glyph = "\uE74D" } };
+        flyout_delete.Click += (s, args) =>
+        {
+            // Handle Delete click for the specific TorrentItem
+        };
+
+        // Add items to the flyout
+        flyout.Items.Add(flyout_resume);
+        flyout.Items.Add(flyout_pause);
+        flyout.Items.Add(flyout_sep1);
+        flyout.Items.Add(flyout_delete);
+
+        // Show the MenuFlyout
+        flyout.ShowAt(row, e.GetPosition(row));
     }
 
     private void TorrentGrid_LoadingRow(object sender, DataGridRowEventArgs e)
@@ -59,6 +78,16 @@ public sealed partial class MainPage : Page
 
         row.RightTapped += TorrentGrid_RightTapped;
     }
+    private void TorrentGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.Count > 0)
+        {
+            var selectedTorrentItem = e.AddedItems[0] as TorrentItem; // Assuming your DataGrid is bound to a collection of TorrentItem objects
+
+            Debug.WriteLine($"Torrent item: {selectedTorrentItem}");
+        }
+    }
+
     #endregion
 
     #region AppBar Buttons
@@ -72,7 +101,8 @@ public sealed partial class MainPage : Page
 
         if (file != null)
         {
-            // TODO: Add torrent
+            await ViewModel.TorrentDataService.AddTorrentFile(file.Path);
+            Debug.WriteLine($"DataService length {ViewModel.TorrentDataService.GetAllTorrents().ToArray().Length}");
         }
     }
 
@@ -118,4 +148,5 @@ public sealed partial class MainPage : Page
         }
     }
     #endregion
+
 }

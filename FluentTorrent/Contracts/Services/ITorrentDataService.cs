@@ -3,5 +3,8 @@
 namespace FluentTorrent.Contracts.Services;
 public interface ITorrentDataService
 {
-    Task<IEnumerable<TorrentItem>> GetGridDataAsync();
+    event EventHandler DataUpdated;
+    Task<TorrentItem> AddTorrentFile(string path);
+    Task<TorrentItem> AddMagnetLink(string links);
+    IEnumerable<TorrentItem> GetAllTorrents();
 }

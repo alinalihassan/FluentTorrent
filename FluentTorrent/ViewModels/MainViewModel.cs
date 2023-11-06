@@ -8,26 +8,36 @@ namespace FluentTorrent.ViewModels;
 
 public partial class MainViewModel : ObservableRecipient, INavigationAware
 {
-    private readonly ITorrentDataService _torrentDataService;
+    public readonly ITorrentDataService TorrentDataService;
 
     public ObservableCollection<TorrentItem> Source { get; } = new ObservableCollection<TorrentItem>();
 
     public MainViewModel(ITorrentDataService torrentDataService)
     {
-        _torrentDataService = torrentDataService;
+        TorrentDataService = torrentDataService;
+        TorrentDataService.DataUpdated += OnDataUpdated;
+        App.TorrentEngine.StatsUpdate += TorrentEngine_StatsUpdate;
     }
+    private void OnDataUpdated(object? sender, EventArgs e) => RefreshData();
+    public void OnNavigatedTo(object parameter) => RefreshData();
 
-    public async void OnNavigatedTo(object parameter)
+    private void RefreshData()
     {
         Source.Clear();
 
-        await Task.Delay(500);
+        var torrents = TorrentDataService.GetAllTorrents();
 
-        var torrents = await _torrentDataService.GetGridDataAsync();
-
-        foreach ( var torrent in torrents)
+        foreach (var torrent in torrents)
         {
             Source.Add(torrent);
+        }
+    }
+
+    private void TorrentEngine_StatsUpdate(object? sender, MonoTorrent.Client.StatsUpdateEventArgs e)
+    {
+        foreach (var torrent in Source)
+        {
+            torrent.NotifyPropertiesChanged();
         }
     }
 
