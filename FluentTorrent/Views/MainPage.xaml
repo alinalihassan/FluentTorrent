@@ -5,6 +5,7 @@
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:converters="using:FluentTorrent.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:FluentTorrent.Views.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wctprimitives="using:CommunityToolkit.WinUI.UI.Controls.Primitives"
     mc:Ignorable="d">
@@ -149,7 +150,21 @@
                     <TextBlock Text="unread emails go here." />
                 </PivotItem>
                 <PivotItem Header="Speed">
-                    <TextBlock Text="flagged emails go here." />
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <local:SpeedIndicator
+                                Margin="0,0,32,0"
+                                Glyph="&#xe74a;"
+                                IconColor="LightBlue"
+                                Size="{x:Bind ViewModel.SizeDownloaded, Mode=OneWay, Converter={StaticResource SizeConverter}}"
+                                Speed="{x:Bind ViewModel.DownloadSpeed, Mode=OneWay, Converter={StaticResource SpeedConverter}}" />
+                            <local:SpeedIndicator
+                                Glyph="&#xe74b;"
+                                IconColor="LightGreen"
+                                Size="{x:Bind ViewModel.SizeUploaded, Mode=OneWay, Converter={StaticResource SizeConverter}}"
+                                Speed="{x:Bind ViewModel.UploadSpeed, Mode=OneWay, Converter={StaticResource SpeedConverter}}" />
+                        </StackPanel>
+                    </StackPanel>
                 </PivotItem>
                 <PivotItem Header="Peers">
                     <TextBlock Text="urgent emails go here." />

@@ -98,7 +98,7 @@
                             <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe71d;" />
                         </NavigationViewItem.Icon>
                     </NavigationViewItem>
-                    <NavigationViewItem x:Uid="Shell_Main" helpers:NavigationHelper.NavigateTo="FluentTorrent.ViewModels.MainViewModel">
+                    <!--<NavigationViewItem x:Uid="Shell_Main" helpers:NavigationHelper.NavigateTo="FluentTorrent.ViewModels.MainViewModel">
                         <NavigationViewItem.Icon>
                             <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe896;" />
                         </NavigationViewItem.Icon>
@@ -107,7 +107,7 @@
                         <NavigationViewItem.Icon>
                             <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe769;" />
                         </NavigationViewItem.Icon>
-                    </NavigationViewItem>
+                    </NavigationViewItem>-->
                 </NavigationView.MenuItems>
 
                 <Frame x:Name="NavigationFrame" Margin="0,-43,0,0" />

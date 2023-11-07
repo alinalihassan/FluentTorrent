@@ -6,22 +6,32 @@ using MonoTorrent.Client;
 namespace FluentTorrent.Models;
 public class TorrentItem : IAsyncDisposable, INotifyPropertyChanged
 {
-    private readonly TorrentManager _manager;
+    public readonly TorrentManager Manager;
 
-    public string Name => _manager.Torrent.Name;
-    public double Size => _manager.Torrent.Size;
-    public string Comment => _manager.Torrent.Comment;
-    public TorrentState State => _manager.State;
-    public double Progress => _manager.Progress;
-    public double DownloadedBytes => _manager.Torrent.Size * (_manager.Progress / 100); // _manager.Monitor.DataBytesDownloaded;
-    public double UploadedBytes => _manager.Monitor.DataBytesUploaded;
-    public double RemainingBytes => _manager.Torrent.Size - (_manager.Torrent.Size * (_manager.Progress / 100));
-    public double DownloadSpeed => _manager.Monitor.DownloadSpeed;
-    public double UploadSpeed => _manager.Monitor.UploadSpeed;
+    public string Name
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(Manager.Torrent?.Name))
+                return Manager.Torrent.Name;
+            if (!string.IsNullOrEmpty(Manager.MagnetLink?.Name))
+                return Manager.MagnetLink.Name;
+            return "";
+        }
+    }
+    public double Size => Manager.Torrent.Size;
+    public string Comment => Manager.Torrent.Comment;
+    public TorrentState State => Manager.State;
+    public double Progress => Manager.Progress;
+    public double DownloadedBytes => Manager.Torrent.Size * (Manager.Progress / 100); // _manager.Monitor.DataBytesDownloaded;
+    public double UploadedBytes => Manager.Monitor.DataBytesUploaded;
+    public double RemainingBytes => Manager.Torrent.Size - (Manager.Torrent.Size * (Manager.Progress / 100));
+    public double DownloadSpeed => Manager.Monitor.DownloadSpeed;
+    public double UploadSpeed => Manager.Monitor.UploadSpeed;
 
     private TorrentItem(TorrentManager manager)
     {
-        _manager = manager;
+        Manager = manager;
     }
 
     // Implement the INotifyPropertyChanged interface
@@ -60,31 +70,31 @@ public class TorrentItem : IAsyncDisposable, INotifyPropertyChanged
 
     public async Task Start()
     {
-        await _manager.StartAsync();
+        await Manager.StartAsync();
     }
 
     public async Task Pause()
     {
-        await _manager.PauseAsync();
+        await Manager.PauseAsync();
     }
 
     public async Task Stop()
     {
-        await _manager.StopAsync();
+        await Manager.StopAsync();
     }
 
     public async Task Delete(bool shouldDeleteFiles)
     {
-        await _manager.StopAsync();
+        await Manager.StopAsync();
 
         Debug.WriteLine($"Deleting with shouldDeleteFiles = {shouldDeleteFiles}");
-        await App.TorrentEngine.RemoveAsync(_manager, shouldDeleteFiles ? RemoveMode.CacheDataAndDownloadedData : RemoveMode.CacheDataOnly);
+        await App.TorrentEngine.RemoveAsync(Manager, shouldDeleteFiles ? RemoveMode.CacheDataAndDownloadedData : RemoveMode.CacheDataOnly);
 
         if (shouldDeleteFiles)
         {
             // TODO: Delete the folders
-            Debug.WriteLine($"Save path {_manager.SavePath}");
-            Debug.WriteLine($"Files: {Directory.GetFiles(_manager.SavePath, "*", SearchOption.AllDirectories)}");
+            Debug.WriteLine($"Save path {Manager.SavePath}");
+            Debug.WriteLine($"Files: {Directory.GetFiles(Manager.SavePath, "*", SearchOption.AllDirectories)}");
             //if (!Directory.GetFiles(_manager.SavePath, "*", SearchOption.AllDirectories).Any())
             //{
             //    Directory.Delete(_manager.SavePath, true);
@@ -96,6 +106,6 @@ public class TorrentItem : IAsyncDisposable, INotifyPropertyChanged
 
     public async ValueTask DisposeAsync()
     {
-        await _manager.StopAsync();
+        await Manager.StopAsync();
     }
 }

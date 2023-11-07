@@ -1,0 +1,23 @@
+<UserControl
+    x:Class="FluentTorrent.Views.Controls.SpeedIndicator"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Orientation="Horizontal">
+        <FontIcon
+            Margin="8"
+            FontFamily="{StaticResource SymbolThemeFontFamily}"
+            FontSize="18"
+            Foreground="{x:Bind IconColor}"
+            Glyph="{x:Bind Glyph}" />
+        <StackPanel Orientation="Vertical">
+            <TextBlock
+                FontSize="14"
+                FontWeight="SemiBold"
+                Text="{x:Bind Speed, Mode=OneWay}" />
+            <TextBlock
+                FontSize="13"
+                FontWeight="SemiLight"
+                Text="{x:Bind Size, Mode=OneWay}" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

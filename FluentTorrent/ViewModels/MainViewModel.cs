@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.WinUI;
 using FluentTorrent.Contracts.Services;
 using FluentTorrent.Contracts.ViewModels;
 using FluentTorrent.Models;
@@ -11,6 +12,10 @@ public partial class MainViewModel : ObservableRecipient, INavigationAware
     public readonly ITorrentDataService TorrentDataService;
 
     public ObservableCollection<TorrentItem> Source { get; } = new ObservableCollection<TorrentItem>();
+    public double SizeDownloaded => Source.Sum(item  => item.Manager.Monitor.DataBytesDownloaded);
+    public double SizeUploaded => Source.Sum(item => item.Manager.Monitor.DataBytesUploaded);
+    public double DownloadSpeed => App.TorrentEngine.TotalDownloadSpeed;
+    public double UploadSpeed => App.TorrentEngine.TotalUploadSpeed;
 
     public MainViewModel(ITorrentDataService torrentDataService)
     {
@@ -31,14 +36,27 @@ public partial class MainViewModel : ObservableRecipient, INavigationAware
         {
             Source.Add(torrent);
         }
+
+        OnPropertyChanged(nameof(SizeDownloaded));
+        OnPropertyChanged(nameof(SizeUploaded));
+        OnPropertyChanged(nameof(DownloadSpeed));
+        OnPropertyChanged(nameof(UploadSpeed));
     }
 
-    private void TorrentEngine_StatsUpdate(object? sender, MonoTorrent.Client.StatsUpdateEventArgs e)
+    private async void TorrentEngine_StatsUpdate(object? sender, MonoTorrent.Client.StatsUpdateEventArgs e)
     {
         foreach (var torrent in Source)
         {
             torrent.NotifyPropertiesChanged();
         }
+
+        await App.MainWindow.DispatcherQueue.EnqueueAsync(() =>
+        {
+            OnPropertyChanged(nameof(SizeDownloaded));
+            OnPropertyChanged(nameof(SizeUploaded));
+            OnPropertyChanged(nameof(DownloadSpeed));
+            OnPropertyChanged(nameof(UploadSpeed));
+        });
     }
 
     public void OnNavigatedFrom()
